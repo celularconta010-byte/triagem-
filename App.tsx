@@ -4,6 +4,7 @@ import { Button } from './components/Button';
 import { BRAZILIAN_CITIES } from './services/cities';
 import { EventDashboard } from './components/EventDashboard';
 import { PrintReport } from './components/PrintReport';
+import { fetchAttendees, addAttendee, clearAllAttendees, fetchEventMetadata, saveEventMetadata, clearEventMetadata } from './services/supabase';
 
 const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('landing');
@@ -43,20 +44,31 @@ const App: React.FC = () => {
     }
   }, [view, eventMeta.local]);
 
-  // Persistência
+  // Carregar dados do Supabase ao iniciar
   useEffect(() => {
-    const saved = localStorage.getItem('ccb-triagem-data');
-    const savedMeta = localStorage.getItem('ccb-triagem-meta');
-    if (saved) setAttendees(JSON.parse(saved));
-    if (savedMeta) setEventMeta(JSON.parse(savedMeta));
+    const loadData = async () => {
+      const [attendeesData, metaData] = await Promise.all([
+        fetchAttendees(),
+        fetchEventMetadata()
+      ]);
+
+      if (attendeesData.length > 0) {
+        setAttendees(attendeesData);
+      }
+
+      if (metaData) {
+        setEventMeta(metaData);
+      }
+    };
+
+    loadData();
   }, []);
 
+  // Salvar metadados do evento quando mudarem
   useEffect(() => {
-    localStorage.setItem('ccb-triagem-data', JSON.stringify(attendees));
-  }, [attendees]);
-
-  useEffect(() => {
-    localStorage.setItem('ccb-triagem-meta', JSON.stringify(eventMeta));
+    if (eventMeta.local || eventMeta.anciao || eventMeta.regionais || eventMeta.palavra || eventMeta.hinos) {
+      saveEventMetadata(eventMeta);
+    }
   }, [eventMeta]);
 
   // Click outside listener for city dropdown
@@ -80,7 +92,7 @@ const App: React.FC = () => {
     setView('form');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!city) return;
 
@@ -94,21 +106,36 @@ const App: React.FC = () => {
       timestamp: Date.now(),
     };
 
-    setAttendees(prev => [newAttendee, ...prev]);
-    setShowSuccess(true);
+    // Adicionar ao Supabase
+    const success = await addAttendee(newAttendee);
 
-    // Reset Completo do formulário após registro
-    setCity('');
-    setCitySearchTerm('');
-    setMinistry(Ministry.NONE);
-    setInstrument(selectedRole === Role.ORGANIST ? 'Órgão' : '');
-    setLevel(Level.MUSICIAN);
+    if (success) {
+      setAttendees(prev => [newAttendee, ...prev]);
+      setShowSuccess(true);
 
-    setTimeout(() => setShowSuccess(false), 2000);
+      // Reset Completo do formulário após registro
+      setCity('');
+      setCitySearchTerm('');
+      setMinistry(Ministry.NONE);
+      setInstrument(selectedRole === Role.ORGANIST ? 'Órgão' : '');
+      setLevel(Level.MUSICIAN);
+
+      setTimeout(() => setShowSuccess(false), 2000);
+    } else {
+      alert('Erro ao salvar participante. Tente novamente.');
+    }
   };
 
-  const clearAllData = () => {
+
+  const clearAllData = async () => {
     if (confirm('ATENÇÃO: Isso apagará TODOS os registros para iniciar um NOVO evento. Deseja continuar?')) {
+      // Limpar dados do Supabase
+      await Promise.all([
+        clearAllAttendees(),
+        clearEventMetadata()
+      ]);
+
+      // Limpar estado local
       setAttendees([]);
       setEventMeta({
         ...initialMeta,
@@ -118,6 +145,7 @@ const App: React.FC = () => {
       setView('landing');
     }
   };
+
 
   const filteredCities = BRAZILIAN_CITIES.filter(c =>
     c.toLowerCase().includes(citySearchTerm.toLowerCase())
