@@ -1,10 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 import { Attendee, EventMetadata } from '../types';
 
+console.log('supabase.ts: Carregando variáveis de ambiente...');
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+if (!supabaseUrl || !supabaseAnonKey) {
+    console.error('ERRO: Variáveis VITE_SUPABASE_URL ou VITE_SUPABASE_ANON_KEY não encontradas!');
+}
+
+export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '');
 
 // Attendees functions
 export async function fetchAttendees(): Promise<Attendee[]> {
