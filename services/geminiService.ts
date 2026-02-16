@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import { Attendee } from "../types";
 
 export const generateMusicalReflection = async (attendees: Attendee[]): Promise<string> => {
-  const apiKey = process.env.API_KEY || '';
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
 
   if (!apiKey) {
     console.warn("Gemini API Key não configurada. Usando mensagem padrão.");
