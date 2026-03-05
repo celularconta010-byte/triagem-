@@ -41,10 +41,10 @@ export const PrintReport: React.FC<PrintReportProps> = ({ attendees, eventMeta, 
                 </div>
             </div>
 
-            <div className="max-w-full print:block">
+            <div className="max-w-full print:block h-full">
                 <div className="print-columns-wrapper">
                     {/* Coluna 1: ESQUERDA - Logo e Informações */}
-                    <div className="print-column py-6">
+                    <div className="print-column">
                         <div className="flex flex-col items-center mb-8">
                             <div className="text-center border-k-double p-2 w-full">
                                 <div className="font-bold text-[8pt] uppercase">Congregação Cristã no Brasil</div>
@@ -63,7 +63,7 @@ export const PrintReport: React.FC<PrintReportProps> = ({ attendees, eventMeta, 
                     </div>
 
                     {/* Coluna 2: MEIO - Instrumentos e Naipes */}
-                    <div className="print-column py-6">
+                    <div className="print-column">
                         <div className="bg-header-gray p-1 border-k font-bold text-center mb-2 uppercase text-[8pt]">
                             Instrumentos
                         </div>
@@ -97,7 +97,7 @@ export const PrintReport: React.FC<PrintReportProps> = ({ attendees, eventMeta, 
                     </div>
 
                     {/* Coluna 3: DIREITA - Estatísticas */}
-                    <div className="print-column py-6">
+                    <div className="print-column">
                         <div className="bg-header-gray p-2 border-k font-bold text-center mb-4 uppercase text-[10pt]">
                             Resumo
                         </div>
