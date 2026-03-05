@@ -63,9 +63,31 @@ export const PrintReport: React.FC<PrintReportProps> = ({ attendees, eventMeta, 
                         <div className="flex-1 border-k border-dashed mt-4"></div>
                     </div>
 
-                    {/* Coluna 2: MEIO - Em Branco */}
-                    <div className="print-column">
-                        <div className="flex-1"></div>
+                    {/* Coluna 2: MEIO - Instrumentos e Naipes */}
+                    <div className="print-column py-6">
+                        <div className="bg-header-gray p-1 border-k font-bold text-center mb-2 uppercase text-[8pt]">
+                            Distribuição / Naipes
+                        </div>
+                        <table className="border-k mb-4 text-[8pt]">
+                            <tbody>
+                                <tr><td className="p-1">Cordas</td><td className="text-center font-bold bg-cordas">{getNaipeCount('Cordas')}</td></tr>
+                                <tr><td className="p-1">Madeiras</td><td className="text-center font-bold bg-madeiras">{getNaipeCount('Madeiras')}</td></tr>
+                                <tr><td className="p-1">Metais</td><td className="text-center font-bold bg-metais">{getNaipeCount('Metais')}</td></tr>
+                                <tr><td className="p-1">Outros</td><td className="text-center font-bold bg-outros">{getNaipeCount('Outros')}</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div className="bg-header-gray p-1 border-k font-bold text-center mb-2 uppercase text-[8pt]">
+                            Quantidades por Instrumento
+                        </div>
+                        <div className="grid grid-cols-2 gap-x-2 gap-y-0.5">
+                            {[...registeredCordas, ...registeredMadeiras, ...registeredMetais, ...registeredOutros].map(inst => (
+                                <div key={inst} className="flex justify-between border-b border-gray-100 px-1">
+                                    <span className="text-[6.5pt] leading-tight">{inst}</span>
+                                    <span className="text-[6.5pt] font-bold">{getInstrumentCount(inst)}</span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                     {/* Coluna 3: DIREITA - Estatísticas */}
@@ -125,21 +147,42 @@ export const PrintReport: React.FC<PrintReportProps> = ({ attendees, eventMeta, 
                             </tbody>
                         </table>
 
-                        {/* 3. Distribuição / Naipes */}
-                        <table className="border-k mb-4">
-                            <thead>
-                                <tr className="bg-header-gray">
-                                    <th className="text-[8pt]">Distribuição / Naipes</th>
-                                    <th className="w-12 text-[8pt]">Qtd.</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td className="text-[9pt]">Cordas</td><td className="text-center font-bold bg-cordas">{getNaipeCount('Cordas')}</td></tr>
-                                <tr><td className="text-[9pt]">Madeiras</td><td className="text-center font-bold bg-madeiras">{getNaipeCount('Madeiras')}</td></tr>
-                                <tr><td className="text-[9pt]">Metais</td><td className="text-center font-bold bg-metais">{getNaipeCount('Metais')}</td></tr>
-                                <tr><td className="text-[9pt]">Outros</td><td className="text-center font-bold bg-outros">{getNaipeCount('Outros')}</td></tr>
-                            </tbody>
-                        </table>
+                        {/* 3. Novos Grupos: Hinos e Cidades */}
+                        <div className="space-y-4">
+                            <table className="border-k">
+                                <thead>
+                                    <tr className="bg-header-gray">
+                                        <th className="text-[8pt]">Hinos Ensaiados</th>
+                                        <th className="w-12 text-[8pt]">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td className="text-[7pt] p-1 leading-tight">
+                                            {eventMeta.hymns || 'Nenhum hino registrado'}
+                                        </td>
+                                        <td className="text-center font-bold text-[9pt]">
+                                            {eventMeta.hymns ? eventMeta.hymns.split(/[,;| ]+/).filter(h => h.trim() !== '').length : 0}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table className="border-k">
+                                <thead>
+                                    <tr className="bg-header-gray">
+                                        <th className="text-[8pt]">Cidades Presentes</th>
+                                        <th className="w-12 text-[8pt]">Qtd.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td className="text-[8pt] font-medium">Total de Localidades</td>
+                                        <td className="text-center font-bold bg-slate-50">{uniqueCitiesCount}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
                         <div className="mt-auto pt-4 border-t border-black flex justify-between items-end">
                             <div className="text-[6pt] uppercase font-bold">Secretaria Musical</div>
