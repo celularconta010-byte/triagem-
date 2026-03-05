@@ -155,8 +155,8 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-slate-50 flex flex-col items-center">
       <style>{`
         @media print {
-          @page { margin: 1cm; size: A4 portrait; }
-          body { background: white !important; font-family: "Times New Roman", serif !important; color: black !important; }
+          @page { margin: 0; size: A4 landscape; }
+          body { background: white !important; font-family: "Times New Roman", serif !important; color: black !important; margin: 0; padding: 0; }
           .no-print { display: none !important; }
           .print-only { display: block !important; }
           
@@ -164,7 +164,40 @@ const App: React.FC = () => {
           .border-k-2 { border: 2px solid black !important; }
           .border-k-double { border: 4px double black !important; }
           
-          * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+          * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box !important; }
+
+          /* Layout para 3 colunas iguais - Sempre horizontal */
+          .print-view {
+            width: 100%;
+            background: white;
+            color: black;
+          }
+          
+          .print-columns-wrapper {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            width: 29.7cm !important;
+            height: 21cm !important;
+            max-width: none !important;
+            overflow: hidden;
+            background: white;
+            margin: 0 auto;
+          }
+          
+          .print-column {
+            flex: 0 0 33.33% !important; /* Força exatamente um terço */
+            height: 21cm !important;
+            padding: 1cm 0.5cm;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid black !important;
+          }
+          
+          .print-column:last-child {
+            border-right: none !important;
+          }
 
           .bg-cordas { background-color: #f6ad55 !important; }
           .bg-madeiras { background-color: #63b3ed !important; }
@@ -176,8 +209,7 @@ const App: React.FC = () => {
           .bg-summary-yellow { background-color: #fefcbf !important; }
 
           table { width: 100%; border-collapse: collapse; margin-bottom: 2px; }
-          th, td { border: 1px solid black; padding: 2px 4px; font-size: 9pt; color: black !important; }
-          .text-vertical { writing-mode: vertical-rl; transform: rotate(180deg); }
+          th, td { border: 1px solid black; padding: 2px 4px; font-size: 8pt; color: black !important; }
         }
         .print-only { display: none; }
       `}</style>
@@ -193,7 +225,7 @@ const App: React.FC = () => {
         </header>
       )}
 
-      <main className={`w-full ${view === 'print' ? 'max-w-[19cm]' : 'max-w-2xl'} px-4 mb-20`}>
+      <main className={`w-full ${view === 'print' ? 'max-w-none p-0' : 'max-w-2xl px-4'} mb-20`}>
 
         {view === 'landing' && (
           <div className="space-y-6 animate-in fade-in duration-500">

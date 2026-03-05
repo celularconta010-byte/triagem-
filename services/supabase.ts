@@ -27,12 +27,13 @@ export async function fetchAttendees(): Promise<Attendee[]> {
 }
 
 export async function addAttendee(attendee: Attendee): Promise<boolean> {
+    console.log('supabase.ts: Tentando adicionar participante:', attendee);
     const { error } = await supabase
         .from('attendees')
         .insert([attendee]);
 
     if (error) {
-        console.error('Error adding attendee:', error);
+        console.error('ERRO Supabase (addAttendee):', error.message, error.details, error.hint);
         return false;
     }
 
@@ -85,33 +86,42 @@ export async function fetchEventMetadata(): Promise<EventMetadata | null> {
 }
 
 export async function saveEventMetadata(metadata: EventMetadata): Promise<boolean> {
-    // First, try to get existing metadata
-    const existing = await fetchEventMetadata();
+    console.log('supabase.ts: Salvando metadados:', metadata);
 
-    if (existing) {
-        // Update existing
-        const { error } = await supabase
+    // First, try to get existing metadata to get its ID
+    const { data: existing, error: fetchError } = await supabase
+        .from('event_metadata')
+        .select('id')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+    if (fetchError && fetchError.code !== 'PGRST116') {
+        console.error('ERRO Supabase (fetch metadata before save):', fetchError.message);
+    }
+
+    const payload = {
+        ...metadata,
+        updated_at: new Date().toISOString()
+    };
+
+    let result;
+    if (existing?.id) {
+        console.log('supabase.ts: Atualizando registro existente ID:', existing.id);
+        result = await supabase
             .from('event_metadata')
-            .update({
-                ...metadata,
-                updated_at: new Date().toISOString()
-            })
-            .eq('id', (existing as any).id);
-
-        if (error) {
-            console.error('Error updating event metadata:', error);
-            return false;
-        }
+            .update(payload)
+            .eq('id', existing.id);
     } else {
-        // Insert new
-        const { error } = await supabase
+        console.log('supabase.ts: Criando novo registro de metadados');
+        result = await supabase
             .from('event_metadata')
-            .insert([metadata]);
+            .insert([payload]);
+    }
 
-        if (error) {
-            console.error('Error inserting event metadata:', error);
-            return false;
-        }
+    if (result.error) {
+        console.error('ERRO Supabase (saveEventMetadata):', result.error.message, result.error.details);
+        return false;
     }
 
     return true;
