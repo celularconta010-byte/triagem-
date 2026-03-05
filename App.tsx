@@ -86,7 +86,7 @@ const App: React.FC = () => {
     setSelectedRole(role);
     setInstrument(role === Role.ORGANIST ? 'Órgão' : '');
     setMinistry(Ministry.NONE);
-    setLevel(Level.MUSICIAN);
+    setLevel(Level.NONE);
     setCity('');
     setCitySearchTerm('');
     setView('form');
@@ -118,7 +118,7 @@ const App: React.FC = () => {
       setCitySearchTerm('');
       setMinistry(Ministry.NONE);
       setInstrument(selectedRole === Role.ORGANIST ? 'Órgão' : '');
-      setLevel(Level.MUSICIAN);
+      setLevel(Level.NONE);
 
       setTimeout(() => setShowSuccess(false), 2000);
     } else {
@@ -302,7 +302,7 @@ const App: React.FC = () => {
               {selectedRole === Role.MUSICIAN && (
                 <>
                   <div>
-                    <label className="block text-xs font-bold text-slate-500 mb-2 uppercase">Situação Musical</label>
+                    <label className="block text-xs font-bold text-slate-500 mb-2 uppercase">Cargo</label>
                     <select
                       value={level}
                       onChange={(e) => setLevel(e.target.value as Level)}

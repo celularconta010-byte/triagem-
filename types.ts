@@ -5,6 +5,7 @@ export enum Role {
 }
 
 export enum Level {
+  NONE = 'Selecione',
   REGIONAL = 'Encarregado Regional',
   LOCAL = 'Encarregado Local',
   INSTRUCTOR = 'Instrutor',
@@ -44,8 +45,8 @@ export interface EventMetadata {
 export const INSTRUMENT_GROUPS = {
   Cordas: ['Violino', 'Viola', 'Violoncelo'],
   Madeiras: [
-    'Flauta', 'Oboé', 'Corne inglês', 'Fagote', 
-    'Clarinete', 'Clarinete Alto', 'Clarinete Baixo', 
+    'Flauta', 'Oboé', 'Corne inglês', 'Fagote',
+    'Clarinete', 'Clarinete Alto', 'Clarinete Baixo',
     'Sax Sopranino', 'Sax Soprano', 'Sax Alto', 'Sax Tenor', 'Sax Barítono', 'Sax Baixo'
   ],
   Metais: [
