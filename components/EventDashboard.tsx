@@ -7,8 +7,6 @@ interface EventDashboardProps {
   attendees: Attendee[];
   eventMeta: EventMetadata;
   onUpdateMeta: (meta: EventMetadata) => void;
-  reflection: string;
-  onUpdateReflection: (reflection: string) => void;
   onClearData: () => void;
   onGenerateReport: () => void;
   onBack: () => void;
@@ -18,20 +16,10 @@ export const EventDashboard: React.FC<EventDashboardProps> = ({
   attendees,
   eventMeta,
   onUpdateMeta,
-  reflection,
-  onUpdateReflection,
   onClearData,
   onGenerateReport,
   onBack
 }) => {
-  const [isLoadingReflection, setIsLoadingReflection] = useState(false);
-
-  const handleGenerateReflection = async () => {
-    setIsLoadingReflection(true);
-    const text = await generateMusicalReflection(attendees);
-    onUpdateReflection(text);
-    setIsLoadingReflection(false);
-  };
 
   const exportData = () => {
     const data = {
@@ -115,23 +103,6 @@ export const EventDashboard: React.FC<EventDashboardProps> = ({
         </div>
       </div>
 
-      <div className="bg-slate-900 text-slate-100 p-6 rounded-2xl shadow-xl relative overflow-hidden">
-        <h3 className="font-bold text-indigo-400 mb-4 flex items-center gap-2">
-          <span className="text-xl">✨</span> Mensagem para o Ensaio
-        </h3>
-        {reflection ? (
-          <div className="text-sm leading-relaxed text-slate-300 italic mb-4">{reflection}</div>
-        ) : (
-          <p className="text-sm text-slate-400 italic mb-4">Gere um encorajamento baseado nos presentes.</p>
-        )}
-        <Button
-          onClick={handleGenerateReflection}
-          disabled={isLoadingReflection || attendees.length === 0}
-          className="bg-indigo-600 hover:bg-indigo-500 text-sm py-2 px-6"
-        >
-          {isLoadingReflection ? 'Gerando...' : 'Gerar com IA'}
-        </Button>
-      </div>
 
       <div className="bg-white p-6 rounded-2xl border-2 border-rose-100 shadow-sm space-y-4">
         <div className="flex items-center gap-3 text-rose-600">

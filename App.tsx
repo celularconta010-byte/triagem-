@@ -14,7 +14,6 @@ const App: React.FC = () => {
   const [instrument, setInstrument] = useState('');
   const [level, setLevel] = useState<Level>(Level.MUSICIAN);
   const [city, setCity] = useState('');
-  const [reflection, setReflection] = useState<string>('');
   const [showSuccess, setShowSuccess] = useState(false);
 
   // Custom Dropdown States for City
@@ -142,7 +141,6 @@ const App: React.FC = () => {
         ...initialMeta,
         date: new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
       });
-      setReflection('');
       setView('landing');
     }
   };
@@ -376,8 +374,6 @@ const App: React.FC = () => {
             attendees={attendees}
             eventMeta={eventMeta}
             onUpdateMeta={setEventMeta}
-            reflection={reflection}
-            onUpdateReflection={setReflection}
             onClearData={clearAllData}
             onGenerateReport={() => setView('print')}
             onBack={() => setView('landing')}
