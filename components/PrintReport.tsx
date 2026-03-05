@@ -159,10 +159,10 @@ export const PrintReport: React.FC<PrintReportProps> = ({ attendees, eventMeta, 
                                 <tbody>
                                     <tr>
                                         <td className="text-[7pt] p-1 leading-tight">
-                                            {eventMeta.hymns || 'Nenhum hino registrado'}
+                                            {eventMeta.hinos || 'Nenhum hino registrado'}
                                         </td>
                                         <td className="text-center font-bold text-[9pt]">
-                                            {eventMeta.hymns ? eventMeta.hymns.split(/[,;| ]+/).filter(h => h.trim() !== '').length : 0}
+                                            {eventMeta.hinos ? eventMeta.hinos.split(/[,;| ]+/).filter(h => h.trim() !== '').length : 0}
                                         </td>
                                     </tr>
                                 </tbody>
