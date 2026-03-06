@@ -14,7 +14,7 @@ export const CityPrint: React.FC<CityPrintProps> = ({ attendees, eventMeta, onBa
         return acc;
     }, {} as Record<string, number>);
 
-    const sortedCities = Object.keys(cityCounts).sort();
+    const sortedCities = Object.keys(cityCounts).sort((a, b) => cityCounts[b] - cityCounts[a] || a.localeCompare(b));
     const totalCities = sortedCities.length;
     const totalAttendees = attendees.length;
 

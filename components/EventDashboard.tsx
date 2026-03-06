@@ -27,7 +27,7 @@ export const EventDashboard: React.FC<EventDashboardProps> = ({
     return acc;
   }, {} as Record<string, number>);
 
-  const uniqueCities = Object.keys(cityCounts).sort();
+  const uniqueCities = Object.keys(cityCounts).sort((a, b) => cityCounts[b] - cityCounts[a] || a.localeCompare(b));
 
   const exportData = () => {
     const data = {
