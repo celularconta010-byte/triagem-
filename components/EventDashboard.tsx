@@ -9,6 +9,7 @@ interface EventDashboardProps {
   onUpdateMeta: (meta: EventMetadata) => void;
   onClearData: () => void;
   onGenerateReport: () => void;
+  onPrintCities: () => void;
   onBack: () => void;
 }
 
@@ -18,9 +19,15 @@ export const EventDashboard: React.FC<EventDashboardProps> = ({
   onUpdateMeta,
   onClearData,
   onGenerateReport,
+  onPrintCities,
   onBack
 }) => {
-  const uniqueCities = Array.from(new Set(attendees.map(a => a.city))).sort();
+  const cityCounts = attendees.reduce((acc, curr) => {
+    acc[curr.city] = (acc[curr.city] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const uniqueCities = Object.keys(cityCounts).sort();
 
   const exportData = () => {
     const data = {
@@ -111,14 +118,26 @@ export const EventDashboard: React.FC<EventDashboardProps> = ({
         </div>
 
         {uniqueCities.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {uniqueCities.map(city => (
-              <div key={city} className="bg-white px-3 py-2 rounded-lg border border-emerald-50 text-emerald-800 text-sm font-medium shadow-sm flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                {city}
-              </div>
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {uniqueCities.map(city => (
+                <div key={city} className="bg-white px-3 py-2 rounded-lg border border-emerald-50 text-emerald-800 text-sm font-medium shadow-sm flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+                    <span className="truncate">{city}</span>
+                  </div>
+                  <span className="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px] font-bold">
+                    {cityCounts[city]}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="pt-2">
+              <Button onClick={onPrintCities} variant="outline" className="w-full sm:w-auto border-emerald-200 text-emerald-700 hover:bg-emerald-100 py-2 text-xs">
+                🖨️ IMPRIMIR LISTA DE CIDADES
+              </Button>
+            </div>
+          </>
         ) : (
           <p className="text-emerald-600/60 text-sm italic italic">Nenhuma cidade registrada ainda.</p>
         )}

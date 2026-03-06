@@ -63,4 +63,4 @@ export const INSTRUMENTS = [
   ...INSTRUMENT_GROUPS.Metais
 ];
 
-export type ViewState = 'landing' | 'form' | 'dashboard' | 'print';
+export type ViewState = 'landing' | 'form' | 'dashboard' | 'print' | 'print-cities';

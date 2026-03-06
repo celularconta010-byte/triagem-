@@ -4,6 +4,7 @@ import { Button } from './components/Button';
 import { BRAZILIAN_CITIES } from './services/cities';
 import { EventDashboard } from './components/EventDashboard';
 import { PrintReport } from './components/PrintReport';
+import { CityPrint } from './components/CityPrint';
 import { fetchAttendees, addAttendee, clearAllAttendees, fetchEventMetadata, saveEventMetadata, clearEventMetadata } from './services/supabase';
 
 const App: React.FC = () => {
@@ -376,12 +377,21 @@ const App: React.FC = () => {
             onUpdateMeta={setEventMeta}
             onClearData={clearAllData}
             onGenerateReport={() => setView('print')}
+            onPrintCities={() => setView('print-cities')}
             onBack={() => setView('landing')}
           />
         )}
 
         {view === 'print' && (
           <PrintReport
+            attendees={attendees}
+            eventMeta={eventMeta}
+            onBack={() => setView('dashboard')}
+          />
+        )}
+
+        {view === 'print-cities' && (
+          <CityPrint
             attendees={attendees}
             eventMeta={eventMeta}
             onBack={() => setView('dashboard')}
