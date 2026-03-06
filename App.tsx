@@ -304,6 +304,16 @@ const App: React.FC = () => {
               {selectedRole === Role.MUSICIAN && (
                 <>
                   <div>
+                    <label className="block text-xs font-bold text-slate-500 mb-2 uppercase">Cargo</label>
+                    <select
+                      value={level}
+                      onChange={(e) => setLevel(e.target.value as Level)}
+                      className="w-full p-4 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none appearance-none"
+                    >
+                      {Object.values(Level).map(l => <option key={l} value={l}>{l}</option>)}
+                    </select>
+                  </div>
+                  <div>
                     <label className="block text-xs font-bold text-slate-500 mb-2 uppercase">Instrumento</label>
                     <select
                       value={instrument}
@@ -312,16 +322,6 @@ const App: React.FC = () => {
                     >
                       <option value="">Selecione o Instrumento</option>
                       {INSTRUMENTS.map(i => <option key={i} value={i}>{i}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 mb-2 uppercase">Cargo</label>
-                    <select
-                      value={level}
-                      onChange={(e) => setLevel(e.target.value as Level)}
-                      className="w-full p-4 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none appearance-none"
-                    >
-                      {Object.values(Level).map(l => <option key={l} value={l}>{l}</option>)}
                     </select>
                   </div>
                 </>
