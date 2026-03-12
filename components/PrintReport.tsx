@@ -50,30 +50,42 @@ export const PrintReport: React.FC<PrintReportProps> = ({ attendees, eventMeta, 
                 <div className="canvas-content w-full h-full grid grid-cols-[8cm_1fr_1fr] gap-4 p-4 z-10">
                     {/* Coluna 1: Identidade */}
                     <div className="print-column flex flex-col h-full border-r border-slate-300 pr-4">
-                        <div className="mb-8 flex-1 mt-40">
-                            <h1 className="text-3xl font-black uppercase text-slate-800 tracking-tight leading-none mb-12 text-center">
-                                {eventMeta.eventTitle || 'ENSAIO REGIONAL'}
+                        <div className="mb-4 flex-1 mt-44">
+                            <h1 className="flex flex-col mb-12 text-left pr-16 tracking-tight leading-[0.9]">
+                                {(() => {
+                                    const title = eventMeta.eventTitle || 'ENSAIO REGIONAL';
+                                    const parts = title.split(' ');
+                                    const firstWord = parts.length > 0 ? parts[0] : '';
+                                    const restOfTitle = parts.length > 1 ? parts.slice(1).join(' ') : '';
+                                    
+                                    return (
+                                        <>
+                                            <span className="text-4xl font-black uppercase text-slate-500">{firstWord}</span>
+                                            {restOfTitle && <span className="text-[2rem] font-black uppercase text-indigo-950 mt-1">{restOfTitle}</span>}
+                                        </>
+                                    );
+                                })()}
                             </h1>
                             
-                            <div className="space-y-6 px-4">
+                            <div className="space-y-6">
                                 <div>
-                                    <span className="block text-xs font-bold text-slate-500 uppercase tracking-widest">Atendimento</span>
-                                    <span className="block text-xl font-bold uppercase text-slate-700">{eventMeta.regionais || 'Não informado'}</span>
+                                    <span className="block text-xs font-bold text-indigo-800 uppercase tracking-widest">Ancião</span>
+                                    <span className="block text-xl font-bold uppercase text-indigo-950">{eventMeta.anciao || 'Não informado'}</span>
                                 </div>
                                 <div>
-                                    <span className="block text-xs font-bold text-slate-500 uppercase tracking-widest">Ancião</span>
-                                    <span className="block text-xl font-bold uppercase text-slate-700">{eventMeta.anciao || 'Não informado'}</span>
+                                    <span className="block text-xs font-bold text-indigo-800 uppercase tracking-widest">Atendimento</span>
+                                    <span className="block text-xl font-bold uppercase text-indigo-950">{eventMeta.regionais || 'Não informado'}</span>
                                 </div>
                                 <div>
-                                    <span className="block text-xs font-bold text-slate-500 uppercase tracking-widest">Palavra</span>
-                                    <span className="block text-xl font-bold uppercase text-slate-700">{eventMeta.palavra || 'Não informado'}</span>
+                                    <span className="block text-xs font-bold text-indigo-800 uppercase tracking-widest">Palavra</span>
+                                    <span className="block text-xl font-bold uppercase text-indigo-950">{eventMeta.palavra || 'Não informado'}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="mt-auto pt-6 border-t border-slate-200 text-center">
-                            <div className="text-xl font-bold text-slate-900">{eventMeta.local || 'Local não informado'}</div>
-                            <div className="text-md text-slate-600 mt-1">{eventMeta.date || ''}</div>
+                        <div className="text-left pb-4 mt-auto">
+                            <div className="text-xl font-bold text-indigo-950">{eventMeta.local || 'Local não informado'}</div>
+                            <div className="text-md font-medium text-indigo-900 mt-1">{eventMeta.date || ''}</div>
                         </div>
                     </div>
 
